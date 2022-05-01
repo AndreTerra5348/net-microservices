@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -13,6 +14,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using PlatformService.Data;
+using PlatformService.SyncDataServices.Http;
 
 namespace PlatformService
 {
@@ -29,12 +31,22 @@ namespace PlatformService
         {
             services.AddDbContext<AppDbContext>(opt => opt.UseInMemoryDatabase("ImMemory"));
             services.AddScoped<IPlatformRepo, PlatformRepo>();
+            services
+                .AddHttpClient<ICommandDataClient, HttpCommandDataClient>()
+                .ConfigurePrimaryHttpMessageHandler(_ => new HttpClientHandler
+                {
+                    // To Bypass SSL certificate validation
+                    // TODO: check out this command "dotnet dev-certs https --trust"
+                    ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true
+                });
             services.AddControllers();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "PlatformService", Version = "v1" });
             });
+
+            Console.WriteLine($"--> CommandService Endpoint : {Configuration["CommandService"]}");
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
