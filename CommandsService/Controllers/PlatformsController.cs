@@ -23,7 +23,7 @@ namespace CommandsService.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<PlatformReadDto>> GetPlatforms()
         {
-            Console.WriteLine("--> Getting Platforms from command service");
+            Console.WriteLine(">>> Getting Platforms from command service");
 
             var platforms = _repository.GetAllPlatforms();
 
@@ -34,7 +34,7 @@ namespace CommandsService.Controllers
         [HttpPost]
         public ActionResult TestInBoundConnection()
         {
-            Console.WriteLine("--> Inbound POST # Command Service");
+            Console.WriteLine(">>> Inbound POST # Command Service");
             return Ok("Inbound test from PlatformsController");
         }
     }

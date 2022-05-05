@@ -32,18 +32,18 @@ namespace PlatformService.AsyncDataServices
 
                 _connection.ConnectionShutdown += RabbitMQ_ConnectionShutdown;
 
-                Console.WriteLine("--> Connected to message bus");
+                Console.WriteLine(">>> Connected to message bus");
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"--> Couldn't connect to the message bus: {ex.Message}");
+                Console.WriteLine($">>> Couldn't connect to the message bus: {ex.Message}");
             }
 
         }
 
         private void RabbitMQ_ConnectionShutdown(object sender, ShutdownEventArgs e)
         {
-            Console.WriteLine("--> RabbitMQ connection shutdown");
+            Console.WriteLine(">>> RabbitMQ connection shutdown");
         }
 
         public void PublishNewPlatform(PlatformPublishedDto platformPublishedDto)
@@ -51,12 +51,12 @@ namespace PlatformService.AsyncDataServices
             var message = JsonSerializer.Serialize(platformPublishedDto);
             if (_connection.IsOpen)
             {
-                Console.WriteLine("--> RabbitMQ connection is open");
+                Console.WriteLine(">>> RabbitMQ connection is open");
                 SendMessage(message);
             }
             else
             {
-                Console.WriteLine("--> RabbitMQ connection is close");
+                Console.WriteLine(">>> RabbitMQ connection is close");
             }
         }
 
@@ -65,12 +65,12 @@ namespace PlatformService.AsyncDataServices
             var body = Encoding.UTF8.GetBytes(message);
             _channel.BasicPublish(exchange: ExchangeName, routingKey: String.Empty, basicProperties: null, body: body);
 
-            Console.WriteLine($"--> Message sent: {message}");
+            Console.WriteLine($">>> Message sent: {message}");
         }
 
         public void Dispose()
         {
-            Console.WriteLine("--> Message bus disposed");
+            Console.WriteLine(">>> Message bus disposed");
             if (_channel.IsOpen)
             {
                 _channel.Close();

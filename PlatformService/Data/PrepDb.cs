@@ -21,20 +21,20 @@ namespace PlatformService.Data
         {
             if (isProd)
             {
-                Console.WriteLine("--> Attempting to apply migrations");
+                Console.WriteLine(">>> Attempting to apply migrations");
                 try
                 {
                     context.Database.Migrate();
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"--> Error applying migrations: {ex.Message}");
+                    Console.WriteLine($">>> Error applying migrations: {ex.Message}");
                 }
             }
 
             if (!context.Platforms.Any())
             {
-                System.Console.WriteLine("--> Seeding data...");
+                System.Console.WriteLine(">>> Seeding data...");
 
                 context.Platforms.AddRange(
                     new Platform { Name = "Dot Net", Publisher = "Microsoft", Cost = "Free" },

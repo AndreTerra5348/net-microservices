@@ -35,13 +35,13 @@ namespace PlatformService
         {
             if (_env.IsProduction())
             {
-                Console.WriteLine("--> Using SqlServer Database");
+                Console.WriteLine(">>> Using SqlServer Database");
                 services.AddDbContext<AppDbContext>(opt =>
                     opt.UseSqlServer(Configuration.GetConnectionString("PlatformsConn")));
             }
             else
             {
-                Console.WriteLine("--> Using InMemory Database");
+                Console.WriteLine(">>> Using InMemory Database");
                 services.AddDbContext<AppDbContext>(opt => opt.UseInMemoryDatabase("ImMemory"));
             }
             services.AddScoped<IPlatformRepo, PlatformRepo>();
@@ -61,7 +61,7 @@ namespace PlatformService
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "PlatformService", Version = "v1" });
             });
 
-            Console.WriteLine($"--> CommandService Endpoint : {Configuration["CommandService"]}");
+            Console.WriteLine($">>> CommandService Endpoint : {Configuration["CommandService"]}");
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

@@ -24,7 +24,7 @@ namespace CommandsService.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<CommandReadDto>> GetCommandsForPlatform(int platformId)
         {
-            Console.WriteLine($"--> GetCommandsForPlatform {platformId}");
+            Console.WriteLine($">>> GetCommandsForPlatform {platformId}");
             if (!_repository.PlatformExists(platformId))
             {
                 return NotFound();
@@ -37,7 +37,7 @@ namespace CommandsService.Controllers
         [HttpGet("{commandId}", Name = "GetCommandForPlatform")]
         public ActionResult<CommandReadDto> GetCommandForPlatform(int platformId, int commandId)
         {
-            Console.WriteLine($"--> GetCommandForPlatform {platformId} / {commandId}");
+            Console.WriteLine($">>> GetCommandForPlatform {platformId} / {commandId}");
             if (!_repository.PlatformExists(platformId))
             {
                 return NotFound();
@@ -55,7 +55,7 @@ namespace CommandsService.Controllers
         [HttpPost]
         public ActionResult<CommandReadDto> CreateCommandForPlatform(int platformId, CommandCreateDto commandCreateDto)
         {
-            Console.WriteLine($"--> CreateCommandForPlatform {platformId}");
+            Console.WriteLine($">>> CreateCommandForPlatform {platformId}");
             if (!_repository.PlatformExists(platformId))
             {
                 return NotFound();
