@@ -13,6 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using PlatformService.AsyncDataServices;
 using PlatformService.Data;
 using PlatformService.SyncDataServices.Http;
 
@@ -44,14 +45,15 @@ namespace PlatformService
                 services.AddDbContext<AppDbContext>(opt => opt.UseInMemoryDatabase("ImMemory"));
             }
             services.AddScoped<IPlatformRepo, PlatformRepo>();
-            services
-                .AddHttpClient<ICommandDataClient, HttpCommandDataClient>()
+            services.AddHttpClient<ICommandDataClient, HttpCommandDataClient>()
                 .ConfigurePrimaryHttpMessageHandler(_ => new HttpClientHandler
                 {
                     // To Bypass SSL certificate validation
                     // TODO: check out this command "dotnet dev-certs https --trust"
                     ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true
                 });
+
+            services.AddSingleton<IMessageBusClient, MessageBusClient>();
             services.AddControllers();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddSwaggerGen(c =>
