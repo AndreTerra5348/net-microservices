@@ -45,13 +45,7 @@ namespace PlatformService
                 services.AddDbContext<AppDbContext>(opt => opt.UseInMemoryDatabase("ImMemory"));
             }
             services.AddScoped<IPlatformRepo, PlatformRepo>();
-            services.AddHttpClient<ICommandDataClient, HttpCommandDataClient>()
-                .ConfigurePrimaryHttpMessageHandler(_ => new HttpClientHandler
-                {
-                    // To Bypass SSL certificate validation
-                    // TODO: check out this command "dotnet dev-certs https --trust"
-                    ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true
-                });
+            services.AddHttpClient<ICommandDataClient, HttpCommandDataClient>();
 
             services.AddSingleton<IMessageBusClient, MessageBusClient>();
             services.AddControllers();
