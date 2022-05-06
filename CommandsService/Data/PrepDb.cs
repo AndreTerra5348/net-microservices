@@ -13,7 +13,7 @@ namespace CommandsService.Data
         {
             using (var serviceScope = applicationBuilder.ApplicationServices.CreateScope())
             {
-                var grpcPlatformClient = serviceScope.ServiceProvider.GetService<PlatformDataClient>();
+                var grpcPlatformClient = serviceScope.ServiceProvider.GetService<IPlatformDataClient>();
 
                 var platforms = grpcPlatformClient.ReturnAllPlatforms();
 
