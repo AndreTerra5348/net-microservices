@@ -15,6 +15,12 @@ spec:
       containers:
         - name: platformservice
           image: andreterra/platformservice:latest
+          env:
+            - name: SQLCONNSTR_PlatformsConn
+              valueFrom:
+                secretKeyRef:
+                  name: platforms-mssql
+                  key: constr
 ---
 apiVersion: v1
 kind: Service
