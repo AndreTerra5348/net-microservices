@@ -19,14 +19,14 @@ namespace PlatformService.Data
 
         private static void SeedData(AppDbContext context)
         {
-            Console.WriteLine(">>> Attempting to apply migrations");
+            System.Console.WriteLine(">>> Attempting to apply migrations");
             try
             {
                 context.Database.Migrate();
             }
             catch (Exception ex)
             {
-                Console.WriteLine($">>> Error applying migrations: {ex.Message}");
+                System.Console.WriteLine($">>> Error applying migrations: {ex.Message}");
             }
 
             if (!context.Platforms.Any())
@@ -43,7 +43,7 @@ namespace PlatformService.Data
             }
             else
             {
-                Console.WriteLine("Platforms already exist");
+                System.Console.WriteLine(">>> Platforms already exist");
             }
         }
     }

@@ -1,19 +1,12 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Net.Http;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using PlatformService.AsyncDataServices;
 using PlatformService.Data;
@@ -34,8 +27,8 @@ namespace PlatformService
 
         public void ConfigureServices(IServiceCollection services)
         {
-            System.Console.WriteLine($">>> connection string: {Configuration.GetConnectionString("PlatformsConn")}");
-            Console.WriteLine(">>> Using SqlServer Database");
+            System.Console.WriteLine(">>> Using sql server database");
+            System.Console.WriteLine($">>> Connection string: {Configuration.GetConnectionString("PlatformsConn")}");
             services.AddDbContext<AppDbContext>(opt =>
                 opt.UseSqlServer(Configuration.GetConnectionString("PlatformsConn")));
 
@@ -51,7 +44,7 @@ namespace PlatformService
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "PlatformService", Version = "v1" });
             });
 
-            Console.WriteLine($">>> CommandService Endpoint : {Configuration["CommandService"]}");
+            System.Console.WriteLine($">>> CommandService Endpoint : {Configuration["CommandService"]}");
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

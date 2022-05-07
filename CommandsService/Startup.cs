@@ -21,18 +21,20 @@ namespace CommandsService
 {
     public class Startup
     {
+        public IConfiguration Configuration { get; }
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }
-
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // services.AddDbContext<AppDbContext>(opt => opt.UseInMemoryDatabase("InMemory"));
+            System.Console.WriteLine(">>> Using sql server database");
+            System.Console.WriteLine($">>> Connection string: {Configuration.GetConnectionString("CommandsConn")}");
+            services.AddDbContext<AppDbContext>(opt =>
+                opt.UseSqlServer(Configuration.GetConnectionString("CommandsConn")));
 
-            services.AddDbContext<AppDbContext>(opt => opt.UseInMemoryDatabase("InMemory"));
             services.AddScoped<ICommandRepo, CommandRepo>();
             services.AddSingleton<IEventProcessor, EventProcessor>();
             services.AddScoped<IPlatformDataClient, PlatformDataClient>();
@@ -45,7 +47,6 @@ namespace CommandsService
             });
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -55,7 +56,7 @@ namespace CommandsService
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "CommandsService v1"));
             }
 
-            // app.UseHttpsRedirection();
+            app.UseHttpsRedirection();
 
             app.UseRouting();
 

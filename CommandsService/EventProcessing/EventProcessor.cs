@@ -60,6 +60,8 @@ namespace CommandsService.EventProcessing
                 try
                 {
                     var platform = _mapper.Map<Platform>(platformPublishedDto);
+                    System.Console.WriteLine($">>> platform id {platform.Id}");
+                    System.Console.WriteLine($">>> platform external id {platform.ExternalId}");
                     if (!repository.ExternalPlatformExists(platform.ExternalId))
                     {
                         repository.CreatePlatform(platform);
