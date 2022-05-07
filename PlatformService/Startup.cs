@@ -26,27 +26,19 @@ namespace PlatformService
     {
 
         public IConfiguration Configuration { get; }
-        private readonly IWebHostEnvironment _env;
 
-        public Startup(IConfiguration configuration, IWebHostEnvironment env)
+        public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-            _env = env;
         }
 
         public void ConfigureServices(IServiceCollection services)
         {
-            if (_env.IsProduction())
-            {
-                Console.WriteLine(">>> Using SqlServer Database");
-                services.AddDbContext<AppDbContext>(opt =>
-                    opt.UseSqlServer(Configuration.GetConnectionString("PlatformsConn")));
-            }
-            else
-            {
-                Console.WriteLine(">>> Using InMemory Database");
-                services.AddDbContext<AppDbContext>(opt => opt.UseInMemoryDatabase("ImMemory"));
-            }
+            System.Console.WriteLine($">>> connection string: {Configuration.GetConnectionString("PlatformsConn")}");
+            Console.WriteLine(">>> Using SqlServer Database");
+            services.AddDbContext<AppDbContext>(opt =>
+                opt.UseSqlServer(Configuration.GetConnectionString("PlatformsConn")));
+
             services.AddScoped<IPlatformRepo, PlatformRepo>();
             services.AddHttpClient<ICommandDataClient, HttpCommandDataClient>();
 
@@ -71,7 +63,7 @@ namespace PlatformService
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "PlatformService v1"));
             }
 
-            // app.UseHttpsRedirection();
+            app.UseHttpsRedirection();
 
             app.UseRouting();
 
@@ -88,7 +80,7 @@ namespace PlatformService
                 });
             });
 
-            PrepDb.PrepPopulation(app, env.IsProduction());
+            PrepDb.PrepPopulation(app);
         }
     }
 }
