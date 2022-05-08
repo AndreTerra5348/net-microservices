@@ -61,11 +61,11 @@ namespace PlatformService.Controllers
                 var platformCreateEventDto = _mapper.Map<PlatformCreateEventDto>(platform);
                 platformCreateEventDto.Event = "Platform_Created";
                 _messageBusClient.PublishEvent(platformCreateEventDto);
-                Console.WriteLine($">>> async message sent");
+                Console.WriteLine($">>> Event sent: {platformCreateEventDto.Event}");
             }
             catch (Exception ex)
             {
-                Console.WriteLine($">>> Error sending async message: {ex.Message}");
+                Console.WriteLine($">>> Error sending Platform_Created event: {ex.Message}");
             }
 
             return CreatedAtRoute(nameof(GetPlatformById), new { Id = platformReadDto.Id }, platformReadDto);
@@ -79,8 +79,22 @@ namespace PlatformService.Controllers
             {
                 return NotFound();
             }
+
             _repository.DeletePlatform(platform);
             _repository.SaveChanges();
+
+            try
+            {
+                var platformDeleteEventDto = _mapper.Map<PlatformDeleteEventDto>(platform);
+                platformDeleteEventDto.Event = "Platform_Deleted";
+                _messageBusClient.PublishEvent(platformDeleteEventDto);
+                Console.WriteLine($">>> Event sent: {platformDeleteEventDto.Event}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($">>> Error sending Platform_Deleted event: {ex.Message}");
+            }
+
             return NoContent();
         }
     }
