@@ -33,6 +33,15 @@ namespace CommandsService.Data
             _context.Platforms.Add(platform);
         }
 
+        public void DeleteCommand(Command command)
+        {
+            if (command == null)
+            {
+                throw new ArgumentNullException(nameof(command));
+            }
+            _context.Commands.Remove(command);
+        }
+
         public void DeletePlatform(Platform platform)
         {
             if (platform == null)
