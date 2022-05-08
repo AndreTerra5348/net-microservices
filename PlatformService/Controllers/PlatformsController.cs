@@ -17,18 +17,15 @@ namespace PlatformService.Controllers
     {
         private readonly IPlatformRepo _repository;
         private readonly IMapper _mapper;
-        private readonly ICommandDataClient _commandDataClient;
         private readonly IMessageBusClient _messageBusClient;
 
         public PlatformsController(
             IPlatformRepo repository,
             IMapper mapper,
-            ICommandDataClient commandDataClient,
             IMessageBusClient messageBusClient)
         {
             _repository = repository;
             _mapper = mapper;
-            _commandDataClient = commandDataClient;
             _messageBusClient = messageBusClient;
         }
 
@@ -51,7 +48,7 @@ namespace PlatformService.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<PlatformReadDto>> CreatePlatform(PlatformCreateDto platformCreateDto)
+        public ActionResult<PlatformReadDto> CreatePlatform(PlatformCreateDto platformCreateDto)
         {
             var platform = _mapper.Map<Platform>(platformCreateDto);
             _repository.CreatePlatform(platform);
@@ -59,29 +56,36 @@ namespace PlatformService.Controllers
 
             var platformReadDto = _mapper.Map<PlatformReadDto>(platform);
 
-            // Sync message
-            try
-            {
-                await _commandDataClient.SendPlatformToCommand(platformReadDto);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error sending sync message: {ex.Message}");
-            }
-
-            // Async message
             try
             {
                 var platformPublishedDto = _mapper.Map<PlatformPublishedDto>(platformReadDto);
                 platformPublishedDto.Event = "Platform_Published";
                 _messageBusClient.PublishNewPlatform(platformPublishedDto);
+                Console.WriteLine($">>> async message sent");
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error sending async message: {ex.Message}");
+                Console.WriteLine($">>> Error sending async message: {ex.Message}");
             }
 
             return CreatedAtRoute(nameof(GetPlatformById), new { Id = platformReadDto.Id }, platformReadDto);
+        }
+
+        [HttpDelete("{id}")]
+        public ActionResult DeletePlatform(int id)
+        {
+            try
+            {
+                _repository.DeletePlatform(id);
+                _repository.SaveChanges();
+                System.Console.WriteLine($">>> Platform {id} deleted");
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                System.Console.WriteLine($">>> Error deleting platform: {ex.Message}");
+                return NotFound();
+            }
         }
     }
 }
