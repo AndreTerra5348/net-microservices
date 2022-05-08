@@ -10,7 +10,7 @@ namespace CommandsService.Data
         void CreatePlatform(Platform platform);
         bool PlatformExists(int platformId);
         bool ExternalPlatformExists(int externalPlatformId);
-        Platform GetPlatformById(int platformId);
+        Platform GetPlatformByExternalId(int externalId);
         void DeletePlatform(Platform platform);
 
 

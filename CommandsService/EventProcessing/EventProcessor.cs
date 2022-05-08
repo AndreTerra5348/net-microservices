@@ -27,6 +27,9 @@ namespace CommandsService.EventProcessing
                 case EventType.PlatformCreated:
                     AddPlatform(message);
                     break;
+                case EventType.PlatformDeleted:
+                    DeletePlatform(message);
+                    break;
                 default:
                     break;
             }
@@ -42,6 +45,9 @@ namespace CommandsService.EventProcessing
                 case "Platform_Created":
                     System.Console.WriteLine(">>> Platform published event");
                     return EventType.PlatformCreated;
+                case "Platform_Deleted":
+                    System.Console.WriteLine(">>> Platform deleted event");
+                    return EventType.PlatformDeleted;
                 default:
                     System.Console.WriteLine(">>> Undetermined event");
                     return EventType.Undetermined;
@@ -77,11 +83,42 @@ namespace CommandsService.EventProcessing
                 }
             }
         }
+
+        private void DeletePlatform(string message)
+        {
+            using (var scope = _scopeFactory.CreateScope())
+            {
+                var repository = scope.ServiceProvider.GetRequiredService<ICommandRepo>();
+
+                var platformDeletedEventDto = JsonSerializer.Deserialize<PlatformDeleteEventDto>(message);
+
+                try
+                {
+                    var deletedPlatform = _mapper.Map<Platform>(platformDeletedEventDto);
+                    var platform = repository.GetPlatformByExternalId(deletedPlatform.ExternalId);
+                    if (platform != null)
+                    {
+                        repository.DeletePlatform(platform);
+                        repository.SaveChanges();
+                        System.Console.WriteLine(">>> Platform deleted");
+                    }
+                    else
+                    {
+                        System.Console.WriteLine(">>> Platform doesn't exist");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    System.Console.WriteLine($">>> Couldn't delete platform: {ex.Message}");
+                }
+            }
+        }
     }
 
     enum EventType
     {
         PlatformCreated,
+        PlatformDeleted,
         Undetermined
     }
 }

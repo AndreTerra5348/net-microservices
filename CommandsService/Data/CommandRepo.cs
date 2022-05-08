@@ -73,9 +73,9 @@ namespace CommandsService.Data
                 .OrderBy(c => c.Platform.Name);
         }
 
-        public Platform GetPlatformById(int platformId)
+        public Platform GetPlatformByExternalId(int externalId)
         {
-            return _context.Platforms.FirstOrDefault(p => p.Id == platformId);
+            return _context.Platforms.FirstOrDefault(p => p.ExternalId == externalId);
         }
 
         public bool PlatformExists(int platformId)
