@@ -46,7 +46,7 @@ namespace PlatformService.AsyncDataServices
             Console.WriteLine(">>> RabbitMQ connection shutdown");
         }
 
-        public void PublishNewPlatform(PlatformPublishedDto platformPublishedDto)
+        public void PublishNewPlatform(PlatformCreateEventDto platformPublishedDto)
         {
             var message = JsonSerializer.Serialize(platformPublishedDto);
             if (_connection.IsOpen)
