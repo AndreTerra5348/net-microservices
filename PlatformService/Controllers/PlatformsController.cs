@@ -60,7 +60,7 @@ namespace PlatformService.Controllers
             {
                 var platformCreateEventDto = _mapper.Map<PlatformCreateEventDto>(platformReadDto);
                 platformCreateEventDto.Event = "Platform_Created";
-                _messageBusClient.PublishNewPlatform(platformCreateEventDto);
+                _messageBusClient.PublishPlatformEvent(platformCreateEventDto);
                 Console.WriteLine($">>> async message sent");
             }
             catch (Exception ex)
