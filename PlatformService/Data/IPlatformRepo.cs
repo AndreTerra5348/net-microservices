@@ -9,6 +9,6 @@ namespace PlatformService.Data
         IEnumerable<Platform> GetAllPlatforms();
         Platform GetPlatformById(int id);
         void CreatePlatform(Platform platform);
-        void DeletePlatform(int id);
+        void DeletePlatform(Platform platform);
     }
 }

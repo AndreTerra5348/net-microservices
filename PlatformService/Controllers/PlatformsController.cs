@@ -74,18 +74,14 @@ namespace PlatformService.Controllers
         [HttpDelete("{id}")]
         public ActionResult DeletePlatform(int id)
         {
-            try
+            var platform = _repository.GetPlatformById(id);
+            if (platform == null)
             {
-                _repository.DeletePlatform(id);
-                _repository.SaveChanges();
-                System.Console.WriteLine($">>> Platform {id} deleted");
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                System.Console.WriteLine($">>> Error deleting platform: {ex.Message}");
                 return NotFound();
             }
+            _repository.DeletePlatform(platform);
+            _repository.SaveChanges();
+            return NoContent();
         }
     }
 }

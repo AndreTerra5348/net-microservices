@@ -24,9 +24,12 @@ namespace PlatformService.Data
             _context.Platforms.Add(platform);
         }
 
-        public void DeletePlatform(int id)
+        public void DeletePlatform(Platform platform)
         {
-            var platform = _context.Platforms.FirstOrDefault(p => p.Id == id);
+            if (platform == null)
+            {
+                throw new ArgumentNullException(nameof(platform));
+            }
             _context.Platforms.Remove(platform);
         }
 
