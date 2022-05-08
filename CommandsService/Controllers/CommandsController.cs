@@ -70,5 +70,26 @@ namespace CommandsService.Controllers
                 new { platformId = platformId, commandId = commandReadDto.Id },
                 commandReadDto);
         }
+
+        [HttpDelete("{commandId}")]
+        public ActionResult DeleteCommandForPlatform(int platformId, int commandId)
+        {
+            Console.WriteLine($">>> DeleteCommandForPlatform {platformId} / {commandId}");
+            if (!_repository.PlatformExists(platformId))
+            {
+                return NotFound();
+            }
+
+            var command = _repository.GetCommand(platformId, commandId);
+            if (command == null)
+            {
+                return NotFound();
+            }
+
+            _repository.DeleteCommand(command);
+            _repository.SaveChanges();
+
+            return NoContent();
+        }
     }
 }
