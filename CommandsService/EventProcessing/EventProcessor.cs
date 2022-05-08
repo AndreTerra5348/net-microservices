@@ -24,7 +24,7 @@ namespace CommandsService.EventProcessing
 
             switch (eventType)
             {
-                case EventType.PlatformPublished:
+                case EventType.PlatformCreated:
                     AddPlatform(message);
                     break;
                 default:
@@ -39,9 +39,9 @@ namespace CommandsService.EventProcessing
             var eventType = JsonSerializer.Deserialize<GenericEventDto>(notificationMessage);
             switch (eventType.Event)
             {
-                case "Platform_Published":
+                case "Platform_Created":
                     System.Console.WriteLine(">>> Platform published event");
-                    return EventType.PlatformPublished;
+                    return EventType.PlatformCreated;
                 default:
                     System.Console.WriteLine(">>> Undetermined event");
                     return EventType.Undetermined;
@@ -49,17 +49,17 @@ namespace CommandsService.EventProcessing
             }
         }
 
-        private void AddPlatform(string platformPublishedMessage)
+        private void AddPlatform(string message)
         {
             using (var scope = _scopeFactory.CreateScope())
             {
                 var repository = scope.ServiceProvider.GetRequiredService<ICommandRepo>();
 
-                var platformPublishedDto = JsonSerializer.Deserialize<PlatformPublishedDto>(platformPublishedMessage);
+                var platformCreatedDto = JsonSerializer.Deserialize<PlatformCreateEventDto>(message);
 
                 try
                 {
-                    var platform = _mapper.Map<Platform>(platformPublishedDto);
+                    var platform = _mapper.Map<Platform>(platformCreatedDto);
                     if (!repository.ExternalPlatformExists(platform.ExternalId))
                     {
                         repository.CreatePlatform(platform);
@@ -81,7 +81,7 @@ namespace CommandsService.EventProcessing
 
     enum EventType
     {
-        PlatformPublished,
+        PlatformCreated,
         Undetermined
     }
 }
