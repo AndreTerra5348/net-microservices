@@ -52,8 +52,6 @@ namespace CommandsService.Data
             System.Console.WriteLine(">>> Seeding platforms");
             foreach (var platform in platforms)
             {
-                System.Console.WriteLine($">>> platform id {platform.Id}");
-                System.Console.WriteLine($">>> platform external id {platform.ExternalId}");
                 if (!repository.ExternalPlatformExists(platform.ExternalId))
                 {
                     repository.CreatePlatform(platform);
