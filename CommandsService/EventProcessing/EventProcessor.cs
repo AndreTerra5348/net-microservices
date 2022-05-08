@@ -43,7 +43,7 @@ namespace CommandsService.EventProcessing
             switch (eventType.Event)
             {
                 case "Platform_Created":
-                    System.Console.WriteLine(">>> Platform published event");
+                    System.Console.WriteLine(">>> Platform created event");
                     return EventType.PlatformCreated;
                 case "Platform_Deleted":
                     System.Console.WriteLine(">>> Platform deleted event");
@@ -70,7 +70,7 @@ namespace CommandsService.EventProcessing
                     {
                         repository.CreatePlatform(platform);
                         repository.SaveChanges();
-                        System.Console.WriteLine(">>> Platform added");
+                        System.Console.WriteLine(">>> Platform created");
                     }
                     else
                     {
@@ -79,7 +79,7 @@ namespace CommandsService.EventProcessing
                 }
                 catch (Exception ex)
                 {
-                    System.Console.WriteLine($">>> Couldn't add platform: {ex.Message}");
+                    System.Console.WriteLine($">>> Couldn't create platform: {ex.Message}");
                 }
             }
         }
