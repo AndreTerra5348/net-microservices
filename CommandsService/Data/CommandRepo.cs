@@ -33,6 +33,22 @@ namespace CommandsService.Data
             _context.Platforms.Add(platform);
         }
 
+        public void DeletePlatform(Platform platform)
+        {
+            if (platform == null)
+            {
+                throw new ArgumentNullException(nameof(platform));
+            }
+
+            var platformCommands = _context.Commands.Where(c => c.PlatformId == platform.Id);
+            foreach (var command in platformCommands)
+            {
+                _context.Commands.Remove(command);
+            }
+
+            _context.Platforms.Remove(platform);
+        }
+
         public bool ExternalPlatformExists(int externalId)
         {
             return _context.Platforms.Any(p => p.ExternalId == externalId);
@@ -55,6 +71,11 @@ namespace CommandsService.Data
             return _context.Commands
                 .Where(c => c.PlatformId == platformId)
                 .OrderBy(c => c.Platform.Name);
+        }
+
+        public Platform GetPlatformById(int platformId)
+        {
+            return _context.Platforms.FirstOrDefault(p => p.Id == platformId);
         }
 
         public bool PlatformExists(int platformId)
