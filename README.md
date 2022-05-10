@@ -46,8 +46,8 @@ Here is a list of features I've added apart from the code along tutorial
 - Command Service: Platform Deleted message subscribe to RabbitMQ
 
 ## Built with
-- .Net
-- Asp.net Core
+- .Net 5.0
+- Asp.Net Core
 - Entity Framework
 - Microsoft SQL Server
 - Docker
