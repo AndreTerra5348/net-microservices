@@ -7,7 +7,7 @@ This is a two services system to manage Platforms and Commands.
 
 I made this project to learn the basics of .Net microservices architecture and technologies like: Asp.net Core, Entity Framework, Microsoft SQL Server, Docker, Kubernetes, RabbitMQ, gRPC, etc.
 
-This project is mostly made with this [11-hours-long code-along youtube tutorial](https://youtu.be/DgVjEo3OGBI) from [Les Jackson](https://www.youtube.com/channel/UCIMRGVXufHT69s1uaHHYJIA)
+This project is mostly made with this [11-hours-long code-along course](https://youtu.be/DgVjEo3OGBI) from [Les Jackson Youtube Channel](https://www.youtube.com/channel/UCIMRGVXufHT69s1uaHHYJIA)
 
 See [Improvements](#improvements) section for the features I've added.
 
